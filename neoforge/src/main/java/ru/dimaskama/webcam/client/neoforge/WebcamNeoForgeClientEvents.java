@@ -20,7 +20,6 @@ import ru.dimaskama.webcam.client.WebcamClientService;
 import ru.dimaskama.webcam.client.WebcamModClient;
 import ru.dimaskama.webcam.client.neoforge.screen.AdvancedWebcamScreen;
 import ru.dimaskama.webcam.client.render.WebcamHud;
-import ru.dimaskama.webcam.client.render.WebcamWorldRenderer;
 import ru.dimaskama.webcam.message.Channel;
 import ru.dimaskama.webcam.message.Message;
 import ru.dimaskama.webcam.neoforge.WebcamNeoForgeMessaging;
@@ -83,11 +82,6 @@ public class WebcamNeoForgeClientEvents {
         if (event.getName().equals(VanillaGuiLayers.CAMERA_OVERLAYS)) {
             WebcamHud.drawHud(event.getGuiGraphics(), Minecraft.getInstance().getDeltaTracker());
         }
-    }
-
-    @SubscribeEvent
-    private static void onRenderAfterEntitiesEvent(RenderLevelStageEvent.AfterEntities event) {
-        WebcamWorldRenderer.renderWorldWebcams(event.getCamera(), event.getPoseStack(), Minecraft.getInstance().renderBuffers().bufferSource());
     }
 
     @SubscribeEvent

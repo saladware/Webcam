@@ -10,8 +10,8 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.PlayerSkin;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.DisplayingVideoManager;
 import ru.dimaskama.webcam.client.KnownSourceClient;
@@ -98,7 +98,12 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float delta) {
+        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+            int x = getX();
+            int y = getY();
+            int entryWidth = getWidth();
+            int entryHeight = getHeight();
+
             guiGraphics.fill(x, y, x + entryWidth - 4, y + entryHeight, 0x33000000);
 
             ResourceLocation customIcon = source.getCustomIcon();
@@ -118,7 +123,7 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
             guiGraphics.drawString(Minecraft.getInstance().font, source.getName(), x + 36, y + 4, 0xFFFFFFFF);
 
             hideButton.setRectangle(20, 20, x + entryWidth - 4 - 22, y + ((entryHeight - 20) >> 1));
-            hideButton.render(guiGraphics, mouseX, mouseY, delta);
+            hideButton.render(guiGraphics, mouseX, mouseY, deltaTicks);
         }
 
         @Override

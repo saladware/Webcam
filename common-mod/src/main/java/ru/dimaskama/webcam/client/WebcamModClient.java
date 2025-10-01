@@ -35,11 +35,12 @@ public class WebcamModClient {
             BlockedSources.CODEC,
             BlockedSources::new
     );
+    public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(WebcamMod.id("webcam"));
     public static final KeyMapping OPEN_WEBCAM_MENU_KEY = new KeyMapping(
             "key.webcam.open_menu",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_C,
-            "key.categories.webcam"
+            KEY_CATEGORY
     );
     private static WebcamClientService service;
     private static boolean canUseAdvancedConfigScreen;

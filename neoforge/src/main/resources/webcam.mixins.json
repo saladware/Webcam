@@ -4,10 +4,11 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "client.AvatarRenderStateMixin",
+    "client.AvatarRendererMixin",
+    "client.LevelRendererMixin",
     "client.LivingEntityRendererMixin",
     "client.NativeImageAccessor",
-    "client.PlayerRendererMixin",
-    "client.PlayerRenderStateMixin",
     "client.MinecraftMixin"
   ],
   "mixins": [

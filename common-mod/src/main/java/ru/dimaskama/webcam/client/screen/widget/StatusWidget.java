@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +45,7 @@ public class StatusWidget extends AbstractWidget {
     }
 
     @Override
-    protected boolean isValidClickButton(int i) {
+    protected boolean isValidClickButton(MouseButtonInfo mouseButtonInfo) {
         return false;
     }
 

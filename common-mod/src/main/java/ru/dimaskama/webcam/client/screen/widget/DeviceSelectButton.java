@@ -3,6 +3,7 @@ package ru.dimaskama.webcam.client.screen.widget;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.Component;
 import ru.dimaskama.webcam.client.cap.Capturing;
 
@@ -20,7 +21,7 @@ public class DeviceSelectButton extends AbstractButton {
     }
 
     @Override
-    public void onPress() {
+    public void onPress(InputWithModifiers inputWithModifiers) {
         IntList available = Capturing.getDevices();
         if (available.isEmpty()) {
             Capturing.broadcastError(Component.translatable("webcam.error.no_available"));

@@ -3,6 +3,7 @@ package ru.dimaskama.webcam.client.screen.widget;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.Component;
 import ru.dimaskama.webcam.client.config.Resolution;
 
@@ -21,7 +22,7 @@ public class ResolutionSelectButton extends AbstractButton {
     }
 
     @Override
-    public void onPress() {
+    public void onPress(InputWithModifiers inputWithModifiers) {
         Resolution[] available = Resolution.values();
         int index = 0;
         for (int i = 0; i < available.length; i++) {

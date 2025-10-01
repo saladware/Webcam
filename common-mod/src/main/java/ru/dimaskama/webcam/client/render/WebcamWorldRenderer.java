@@ -1,11 +1,9 @@
 package ru.dimaskama.webcam.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeStorage;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector2fc;
@@ -17,35 +15,32 @@ import ru.dimaskama.webcam.net.VideoSource;
 
 public class WebcamWorldRenderer {
 
-    public static void renderWorldWebcams(Camera camera, PoseStack poseStack, MultiBufferSource consumers) {
+    public static void renderWorldWebcams(CameraRenderState camera, SubmitNodeStorage submitNodeStorage) {
         if (DisplayingVideoManager.INSTANCE.hasViewPermission() && WebcamModClient.CONFIG.getData().showWebcams()) {
+            PoseStack poseStack = new PoseStack();
             DisplayingVideoManager.INSTANCE.forEach(displayingVideo -> {
                 DisplayingVideo.RenderData renderData = displayingVideo.getRenderData();
                 if (renderData != null && renderData.source() instanceof VideoSource.Custom custom) {
-                    renderImage(camera, poseStack, consumers, custom, renderData.textureId());
+                    renderImage(camera, poseStack, submitNodeStorage, custom, renderData.textureId());
                 }
             });
         }
     }
 
-    public static void renderImage(Camera camera, PoseStack poseStack, MultiBufferSource consumers, VideoSource.Custom custom, ResourceLocation textureId) {
+    public static void renderImage(CameraRenderState camera, PoseStack poseStack, SubmitNodeStorage submitNodeStorage, VideoSource.Custom custom, ResourceLocation textureId) {
         Vector3dc pos = custom.getPos();
-        Entity cameraEntity = camera.getEntity();
         double maxDistance = custom.getMaxDistance();
-        if (cameraEntity.position().distanceToSqr(pos.x(), pos.y(), pos.z()) <= maxDistance * maxDistance) {
+        if (camera.entityPos.distanceToSqr(pos.x(), pos.y(), pos.z()) <= maxDistance * maxDistance) {
             poseStack.pushPose();
-            Vec3 cameraPos = camera.getPosition();
+            Vec3 cameraPos = camera.pos;
             poseStack.translate(pos.x() - cameraPos.x, pos.y() - cameraPos.y, pos.z() - cameraPos.z);
             Vector2fc customRotation = custom.getCustomRotation();
-            poseStack.mulPose(new Quaternionf().rotationYXZ(
-                    (customRotation != null ? customRotation.y() - 90.0F : 180.0F - camera.getYRot()) * Mth.DEG_TO_RAD,
-                    (customRotation != null ? customRotation.x() : -camera.getXRot()) * Mth.DEG_TO_RAD,
-                    0.0F
-            ));
+            poseStack.mulPose(customRotation != null
+                    ? new Quaternionf().rotationYXZ(customRotation.y() - 90.0F, customRotation.x(), 0.0F)
+                    : camera.orientation.conjugate(new Quaternionf()));
             float halfWidth = 0.5F * custom.getWidth();
             float halfHeight = 0.5F * custom.getHeight();
-            PoseStack.Pose pose = poseStack.last();
-            WebcamRenderer.render(textureId, pose, consumers, halfWidth, halfHeight, custom.getShape());
+            WebcamRenderer.render(textureId, poseStack, submitNodeStorage, halfWidth, halfHeight, custom.getShape());
             poseStack.popPose();
         }
     }
