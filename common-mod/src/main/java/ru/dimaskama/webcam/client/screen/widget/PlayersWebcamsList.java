@@ -31,6 +31,7 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
     private final Runnable dirtyAction;
     private final int rowWidth;
     private Predicate<KnownSourceClient> filter;
+    private boolean shouldRefresh;
 
     public PlayersWebcamsList(Minecraft minecraft, Runnable dirtyAction, int rowWidth) {
         super(minecraft, 0, 0, 0, 36);
@@ -40,25 +41,34 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
 
     public void refresh(Predicate<KnownSourceClient> filter) {
         this.filter = filter;
-        clearEntries();
-        BlockedSources blocked = WebcamModClient.BLOCKED_SOURCES.getData();
-        List<KnownSourceClient> allSources = new ArrayList<>();
-        blocked.sources().forEach((uuid, name) -> {
-            KnownSourceClient sourceOnServer = KnownSourceManager.INSTANCE.get(uuid);
-            allSources.add(sourceOnServer != null
-                    ? sourceOnServer
-                    : new KnownSourceClient(uuid, name));
-        });
-        KnownSourceManager.INSTANCE.forEach(source -> {
-            if (!blocked.contains(source.getUuid())) {
-                allSources.add(source);
-            }
-        });
-        for (KnownSourceClient source : allSources) {
-            if (filter.test(source)) {
-                addEntry(new Entry(source, blocked.contains(source.getUuid())));
+        shouldRefresh = true;
+    }
+
+    @Override
+    public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+        if (shouldRefresh) {
+            shouldRefresh = false;
+            clearEntries();
+            BlockedSources blocked = WebcamModClient.BLOCKED_SOURCES.getData();
+            List<KnownSourceClient> allSources = new ArrayList<>();
+            blocked.sources().forEach((uuid, name) -> {
+                KnownSourceClient sourceOnServer = KnownSourceManager.INSTANCE.get(uuid);
+                allSources.add(sourceOnServer != null
+                        ? sourceOnServer
+                        : new KnownSourceClient(uuid, name));
+            });
+            KnownSourceManager.INSTANCE.forEach(source -> {
+                if (!blocked.contains(source.getUuid())) {
+                    allSources.add(source);
+                }
+            });
+            for (KnownSourceClient source : allSources) {
+                if (filter.test(source)) {
+                    addEntry(new Entry(source, blocked.contains(source.getUuid())));
+                }
             }
         }
+        super.renderWidget(guiGraphics, i, j, f);
     }
 
     @Override
@@ -99,10 +109,10 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
 
         @Override
         public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
-            int x = getX();
+            int x = getX() + 2;
             int y = getY();
             int entryWidth = getWidth();
-            int entryHeight = getHeight();
+            int entryHeight = getHeight() - 4;
 
             guiGraphics.fill(x, y, x + entryWidth - 4, y + entryHeight, 0x33000000);
 
