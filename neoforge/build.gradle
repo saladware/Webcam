@@ -32,8 +32,7 @@ dependencies {
 
     shadow minecraftLibrary("ru.dimaskama:javah264:${javah264_version}")
 
-    // TODO change version to ${iris_version} on iris for neoforge 1.21.9 release
-    compileOnly "maven.modrinth:iris:1.9.2+1.21.8-neoforge"
+    compileOnly "maven.modrinth:iris:${iris_version}-neoforge"
 }
 
 shadowJar {
