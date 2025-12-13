@@ -4,7 +4,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.input.MouseButtonInfo;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import ru.dimaskama.webcam.WebcamMod;
@@ -25,7 +26,7 @@ public class StatusWidget extends AbstractWidget {
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         update();
         ResourceLocation sprite = status.fine ? FINE_SPRITE : NOT_FINE_SPRITE;
-        guiGraphics.blitSprite(RenderType::guiTextured, sprite, getX(), getY(), getWidth(), getHeight());
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, getX(), getY(), getWidth(), getHeight());
     }
 
     private void update() {
@@ -44,7 +45,7 @@ public class StatusWidget extends AbstractWidget {
     }
 
     @Override
-    protected boolean isValidClickButton(int i) {
+    protected boolean isValidClickButton(MouseButtonInfo mouseButtonInfo) {
         return false;
     }
 

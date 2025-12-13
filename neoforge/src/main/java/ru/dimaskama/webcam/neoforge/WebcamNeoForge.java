@@ -129,7 +129,7 @@ public class WebcamNeoForge {
                     }
                 }
         );
-        if (FMLEnvironment.dist.isClient()) {
+        if (FMLEnvironment.getDist().isClient()) {
             modContainer.registerExtensionPoint(
                     net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
                     new ru.dimaskama.webcam.client.neoforge.WebcamNeoForgeConfigScreenFactory()

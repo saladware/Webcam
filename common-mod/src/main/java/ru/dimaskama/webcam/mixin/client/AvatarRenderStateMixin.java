@@ -1,15 +1,15 @@
 package ru.dimaskama.webcam.mixin.client;
 
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import ru.dimaskama.webcam.client.DisplayingVideo;
-import ru.dimaskama.webcam.client.duck.PlayerRenderStateDuck;
+import ru.dimaskama.webcam.client.duck.AvatarRenderStateDuck;
 
 import javax.annotation.Nullable;
 
-@Mixin(PlayerRenderState.class)
-abstract class PlayerRenderStateMixin implements PlayerRenderStateDuck {
+@Mixin(AvatarRenderState.class)
+abstract class AvatarRenderStateMixin implements AvatarRenderStateDuck {
 
     @Unique
     private DisplayingVideo webcam_displayingVideo;

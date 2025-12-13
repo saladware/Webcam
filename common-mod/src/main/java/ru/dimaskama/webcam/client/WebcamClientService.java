@@ -1,6 +1,6 @@
 package ru.dimaskama.webcam.client;
 
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
@@ -21,7 +21,7 @@ public interface WebcamClientService {
 
     Screen createAdvancedConfigScreen(@Nullable Screen parent);
 
-    RenderType createWebcamRenderType(String name, VertexFormat.Mode mode, ResourceLocation textureId);
+    RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, ResourceLocation textureId);
 
     void recordPacket(Packet packet);
 

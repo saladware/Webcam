@@ -4,7 +4,7 @@ import ru.dimaskama.webcam.client.DisplayingVideo;
 
 import javax.annotation.Nullable;
 
-public interface PlayerRenderStateDuck {
+public interface AvatarRenderStateDuck {
 
     @Nullable
     DisplayingVideo webcam_getDisplayingVideo();

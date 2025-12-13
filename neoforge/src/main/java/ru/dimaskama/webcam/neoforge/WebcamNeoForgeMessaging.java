@@ -58,7 +58,7 @@ public class WebcamNeoForgeMessaging {
                     payloadType,
                     streamCodec,
                     (payload, context) ->
-                            handler.handle(context.player().getUUID(), context.player().getGameProfile().getName(), (T) payload.message)
+                            handler.handle(context.player().getUUID(), context.player().getGameProfile().name(), (T) payload.message)
             );
         } else {
             registrar.playToClient(

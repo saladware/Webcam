@@ -1,21 +1,18 @@
 package ru.dimaskama.webcam.client.fabric;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.TriState;
 import ru.dimaskama.webcam.client.WebcamClientService;
 import ru.dimaskama.webcam.client.WebcamModClient;
 import ru.dimaskama.webcam.client.fabric.compat.replay.ReplaysCompat;
@@ -23,7 +20,6 @@ import ru.dimaskama.webcam.client.fabric.screen.AdvancedWebcamScreen;
 import ru.dimaskama.webcam.fabric.WebcamFabricMessaging;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.render.WebcamHud;
-import ru.dimaskama.webcam.client.render.WebcamWorldRenderer;
 import ru.dimaskama.webcam.message.Channel;
 import ru.dimaskama.webcam.message.Message;
 import ru.dimaskama.webcam.net.packet.Packet;
@@ -57,15 +53,13 @@ public class WebcamFabricClient implements ClientModInitializer {
             }
 
             @Override
-            public RenderType createWebcamRenderType(String name, VertexFormat.Mode mode, ResourceLocation textureId) {
+            public RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, ResourceLocation textureId) {
                 return RenderType.create(
                         name,
-                        DefaultVertexFormat.POSITION_TEX,
-                        mode,
                         1536,
+                        renderPipeline,
                         RenderType.CompositeState.builder()
-                                .setTextureState(new RenderStateShard.TextureStateShard(textureId, TriState.TRUE, false))
-                                .setShaderState(RenderType.POSITION_TEX_SHADER)
+                                .setTextureState(new RenderStateShard.TextureStateShard(textureId, false))
                                 .createCompositeState(false)
                 );
             }
@@ -78,11 +72,7 @@ public class WebcamFabricClient implements ClientModInitializer {
 
         KeyBindingHelper.registerKeyBinding(WebcamModClient.OPEN_WEBCAM_MENU_KEY);
 
-        HudLayerRegistrationCallback.EVENT.register(layeredDrawer ->
-                layeredDrawer.attachLayerAfter(IdentifiedLayer.MISC_OVERLAYS, WebcamMod.id("webcam_hud"), WebcamHud::drawHud));
-
-        WorldRenderEvents.AFTER_ENTITIES.register(context ->
-                WebcamWorldRenderer.renderWorldWebcams(context.camera(), context.matrixStack(), context.consumers()));
+        HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS, WebcamMod.id("webcam_hud"), WebcamHud::drawHud);
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
                 WebcamModClient.onServerJoinEvent());

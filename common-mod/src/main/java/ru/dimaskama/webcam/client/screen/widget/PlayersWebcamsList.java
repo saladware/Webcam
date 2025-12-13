@@ -9,9 +9,9 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.PlayerSkin;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.DisplayingVideoManager;
 import ru.dimaskama.webcam.client.KnownSourceClient;
@@ -31,6 +31,7 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
     private final Runnable dirtyAction;
     private final int rowWidth;
     private Predicate<KnownSourceClient> filter;
+    private boolean shouldRefresh;
 
     public PlayersWebcamsList(Minecraft minecraft, Runnable dirtyAction, int rowWidth) {
         super(minecraft, 0, 0, 0, 36);
@@ -40,25 +41,34 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
 
     public void refresh(Predicate<KnownSourceClient> filter) {
         this.filter = filter;
-        clearEntries();
-        BlockedSources blocked = WebcamModClient.BLOCKED_SOURCES.getData();
-        List<KnownSourceClient> allSources = new ArrayList<>();
-        blocked.sources().forEach((uuid, name) -> {
-            KnownSourceClient sourceOnServer = KnownSourceManager.INSTANCE.get(uuid);
-            allSources.add(sourceOnServer != null
-                    ? sourceOnServer
-                    : new KnownSourceClient(uuid, name));
-        });
-        KnownSourceManager.INSTANCE.forEach(source -> {
-            if (!blocked.contains(source.getUuid())) {
-                allSources.add(source);
-            }
-        });
-        for (KnownSourceClient source : allSources) {
-            if (filter.test(source)) {
-                addEntry(new Entry(source, blocked.contains(source.getUuid())));
+        shouldRefresh = true;
+    }
+
+    @Override
+    public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+        if (shouldRefresh) {
+            shouldRefresh = false;
+            clearEntries();
+            BlockedSources blocked = WebcamModClient.BLOCKED_SOURCES.getData();
+            List<KnownSourceClient> allSources = new ArrayList<>();
+            blocked.sources().forEach((uuid, name) -> {
+                KnownSourceClient sourceOnServer = KnownSourceManager.INSTANCE.get(uuid);
+                allSources.add(sourceOnServer != null
+                        ? sourceOnServer
+                        : new KnownSourceClient(uuid, name));
+            });
+            KnownSourceManager.INSTANCE.forEach(source -> {
+                if (!blocked.contains(source.getUuid())) {
+                    allSources.add(source);
+                }
+            });
+            for (KnownSourceClient source : allSources) {
+                if (filter.test(source)) {
+                    addEntry(new Entry(source, blocked.contains(source.getUuid())));
+                }
             }
         }
+        super.renderWidget(guiGraphics, i, j, f);
     }
 
     @Override
@@ -98,12 +108,17 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float delta) {
+        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+            int x = getX() + 2;
+            int y = getY();
+            int entryWidth = getWidth();
+            int entryHeight = getHeight() - 4;
+
             guiGraphics.fill(x, y, x + entryWidth - 4, y + entryHeight, 0x33000000);
 
             ResourceLocation customIcon = source.getCustomIcon();
             if (customIcon != null) {
-                guiGraphics.blit(RenderType::guiTextured, customIcon, x, y, 0.0F, 0.0F, 32, 32, 32, 32);
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, customIcon, x, y, 0.0F, 0.0F, 32, 32, 32, 32);
             } else {
                 ClientPacketListener connection = Minecraft.getInstance().getConnection();
                 PlayerInfo playerInfo = connection != null ? connection.getPlayerInfo(source.getUuid()) : null;
@@ -111,14 +126,14 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
                 if (skin != null) {
                     PlayerFaceRenderer.draw(guiGraphics, skin, x, y, 32);
                 } else {
-                    guiGraphics.blitSprite(RenderType::guiTextured, UNKNOWN_SPRITE, x, y, 32, 32);
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, UNKNOWN_SPRITE, x, y, 32, 32);
                 }
             }
 
             guiGraphics.drawString(Minecraft.getInstance().font, source.getName(), x + 36, y + 4, 0xFFFFFFFF);
 
             hideButton.setRectangle(20, 20, x + entryWidth - 4 - 22, y + ((entryHeight - 20) >> 1));
-            hideButton.render(guiGraphics, mouseX, mouseY, delta);
+            hideButton.render(guiGraphics, mouseX, mouseY, deltaTicks);
         }
 
         @Override

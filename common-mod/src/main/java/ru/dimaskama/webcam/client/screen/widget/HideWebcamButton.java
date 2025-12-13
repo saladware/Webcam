@@ -6,7 +6,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import ru.dimaskama.webcam.WebcamMod;
@@ -30,7 +31,7 @@ public class HideWebcamButton extends AbstractButton {
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
         int spriteX = getX() + ((getWidth() - 16) >> 1);
         int spriteY = getY() + ((getHeight() - 16) >> 1);
-        guiGraphics.blitSprite(RenderType::guiTextured, blocked ? BLOCKED_SPRITE : NOT_BLOCKED_SPRITE, spriteX, spriteY, 16, 16, 0xFFFFFFFF);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, blocked ? BLOCKED_SPRITE : NOT_BLOCKED_SPRITE, spriteX, spriteY, 16, 16, 0xFFFFFFFF);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class HideWebcamButton extends AbstractButton {
     }
 
     @Override
-    public void onPress() {
+    public void onPress(InputWithModifiers inputWithModifiers) {
         blocked = !blocked;
         update();
         consumer.accept(blocked);

@@ -38,12 +38,12 @@ public class KnownSourceClient {
             for (int y = 0; y < KnownSource.ICON_DIMENSION; y++) {
                 for (int x = 0; x < KnownSource.ICON_DIMENSION; x++) {
                     int i = (y * KnownSource.ICON_DIMENSION + x) * 4;
-                    customIcon.setPixel(
+                    customIcon.setPixelABGR(
                             x,
                             y,
-                            ((customIconPixels[i + 2] & 0xFF) << 8)
+                            ((customIconPixels[i] & 0xFF) << 24)
                                     | ((customIconPixels[i + 1] & 0xFF) << 16)
-                                    | ((customIconPixels[i] & 0xFF) << 24)
+                                    | ((customIconPixels[i + 2] & 0xFF) << 8)
                                     | (customIconPixels[i + 3] & 0xFF)
                     );
                 }
@@ -64,7 +64,7 @@ public class KnownSourceClient {
     public ResourceLocation getCustomIcon() {
         if (customIcon != null && customIconId == null) {
             ResourceLocation id = WebcamMod.id("custom_icon_" + UndashedUuid.toString(uuid));
-            Minecraft.getInstance().getTextureManager().register(id, new DynamicTexture(customIcon));
+            Minecraft.getInstance().getTextureManager().register(id, new DynamicTexture(id::getPath, customIcon));
             customIconId = id;
         }
         return customIconId;

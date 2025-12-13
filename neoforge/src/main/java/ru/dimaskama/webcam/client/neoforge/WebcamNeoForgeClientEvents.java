@@ -1,28 +1,25 @@
 package ru.dimaskama.webcam.client.neoforge;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.TriState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.lifecycle.ClientStartedEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import ru.dimaskama.webcam.Webcam;
 import ru.dimaskama.webcam.client.WebcamClientService;
 import ru.dimaskama.webcam.client.WebcamModClient;
 import ru.dimaskama.webcam.client.neoforge.screen.AdvancedWebcamScreen;
 import ru.dimaskama.webcam.client.render.WebcamHud;
-import ru.dimaskama.webcam.client.render.WebcamWorldRenderer;
 import ru.dimaskama.webcam.message.Channel;
 import ru.dimaskama.webcam.message.Message;
 import ru.dimaskama.webcam.neoforge.WebcamNeoForgeMessaging;
@@ -34,7 +31,7 @@ import javax.annotation.Nullable;
 public class WebcamNeoForgeClientEvents {
 
     @SubscribeEvent
-    private static void onClientStartedEvent(FMLLoadCompleteEvent event) {
+    private static void onClientStartedEvent(ClientStartedEvent event) {
         WebcamModClient.init(new WebcamClientService() {
             @Override
             public boolean canSendToServer(Channel<?> channel) {
@@ -43,7 +40,7 @@ public class WebcamNeoForgeClientEvents {
 
             @Override
             public void sendToServer(Message message) {
-                PacketDistributor.sendToServer(new WebcamNeoForgeMessaging.MessagePayload(WebcamNeoForgeMessaging.getPayloadType(message.getChannel()), message));
+                ClientPacketDistributor.sendToServer(new WebcamNeoForgeMessaging.MessagePayload(WebcamNeoForgeMessaging.getPayloadType(message.getChannel()), message));
             }
 
             @Override
@@ -57,15 +54,13 @@ public class WebcamNeoForgeClientEvents {
             }
 
             @Override
-            public RenderType createWebcamRenderType(String name, VertexFormat.Mode mode, ResourceLocation textureId) {
+            public RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, ResourceLocation textureId) {
                 return RenderType.create(
                         name,
-                        DefaultVertexFormat.POSITION_TEX,
-                        mode,
                         1536,
+                        renderPipeline,
                         RenderType.CompositeState.builder()
-                                .setTextureState(new RenderStateShard.TextureStateShard(textureId, TriState.TRUE, false))
-                                .setShaderState(RenderType.POSITION_TEX_SHADER)
+                                .setTextureState(new RenderStateShard.TextureStateShard(textureId, false))
                                 .createCompositeState(false)
                 );
             }
@@ -86,13 +81,6 @@ public class WebcamNeoForgeClientEvents {
     private static void onRenderGuiLayerEvent(RenderGuiLayerEvent.Post event) {
         if (event.getName().equals(VanillaGuiLayers.CAMERA_OVERLAYS)) {
             WebcamHud.drawHud(event.getGuiGraphics(), Minecraft.getInstance().getDeltaTracker());
-        }
-    }
-
-    @SubscribeEvent
-    private static void onRenderAfterEntitiesEvent(RenderLevelStageEvent event) {
-        if (event.getStage().equals(RenderLevelStageEvent.Stage.AFTER_ENTITIES)) {
-            WebcamWorldRenderer.renderWorldWebcams(event.getCamera(), event.getPoseStack(), Minecraft.getInstance().renderBuffers().bufferSource());
         }
     }
 

@@ -2,7 +2,7 @@ package ru.dimaskama.webcam.client.render;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import ru.dimaskama.webcam.Webcam;
 import ru.dimaskama.webcam.WebcamMod;
@@ -21,14 +21,12 @@ public class WebcamHud {
     public static void drawHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         ClientConfig config = WebcamModClient.CONFIG.getData();
         if (config.showIcons() && !Webcam.getService().isInReplay()) {
-            guiGraphics.pose().pushPose();
+            guiGraphics.pose().pushMatrix();
             guiGraphics.pose().translate(
                     config.hud().iconX() >= 0.0F ? config.hud().iconX() : (guiGraphics.guiWidth() + config.hud().iconX() - 16.0F * config.hud().iconScale()),
-                    config.hud().iconY() >= 0.0F ? config.hud().iconY() : (guiGraphics.guiHeight() + config.hud().iconY() - 16.0F * config.hud().iconScale()),
-                    0.0F
+                    config.hud().iconY() >= 0.0F ? config.hud().iconY() : (guiGraphics.guiHeight() + config.hud().iconY() - 16.0F * config.hud().iconScale())
             );
-            float scale = config.hud().iconScale();
-            guiGraphics.pose().scale(scale, scale, scale);
+            guiGraphics.pose().scale(config.hud().iconScale());
             WebcamClient client = WebcamClient.getInstance();
             ResourceLocation sprite;
             if (client == null) {
@@ -40,8 +38,8 @@ public class WebcamHud {
             } else {
                 sprite = WEBCAM_DISABLED_SPRITE;
             }
-            guiGraphics.blitSprite(RenderType::guiTextured, sprite, 0, 0, 16, 16);
-            guiGraphics.pose().popPose();
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, 0, 0, 16, 16);
+            guiGraphics.pose().popMatrix();
         }
     }
 

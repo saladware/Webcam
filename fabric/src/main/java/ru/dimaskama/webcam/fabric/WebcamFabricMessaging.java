@@ -36,7 +36,7 @@ public class WebcamFabricMessaging {
                     payloadType,
                     (payload, context) -> handler.handle(
                             context.player().getUUID(),
-                            context.player().getGameProfile().getName(),
+                            context.player().getGameProfile().name(),
                             (T) payload.message()
                     )
             );

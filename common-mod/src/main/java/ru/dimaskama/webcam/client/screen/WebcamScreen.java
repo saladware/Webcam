@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -97,7 +97,7 @@ public class WebcamScreen extends Screen implements DeviceOutputListener {
                     NativeImage prevImage = previewTexture != null ? previewTexture.getPixels() : null;
                     NativeImage newImage = ImageUtil.createNativeImage(prevImage, width, height, rgba);
                     if (newImage != prevImage) {
-                        previewTexture = new DynamicTexture(newImage);
+                        previewTexture = new DynamicTexture(PREVIEW_TEXTURE::getPath, newImage);
                         previewTexture.setFilter(true, false);
                         minecraft.getTextureManager().register(PREVIEW_TEXTURE, previewTexture);
                     } else {
@@ -225,7 +225,7 @@ public class WebcamScreen extends Screen implements DeviceOutputListener {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         super.renderBackground(guiGraphics, mouseX, mouseY, delta);
-        guiGraphics.blitSprite(RenderType::guiTextured, BACKGROUND_SPRITE, menuX, menuY, menuWidth, MENU_HEIGHT);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITE, menuX, menuY, menuWidth, MENU_HEIGHT);
         guiGraphics.drawString(font, title, (width - font.width(title)) >> 1, menuY + 7, 0xFF555555, false);
         if (errorMessage != null) {
             if (System.currentTimeMillis() - errorMessageTime <= 4000L) {
@@ -233,7 +233,7 @@ public class WebcamScreen extends Screen implements DeviceOutputListener {
             }
         }
         if (showPreview && previewTexture != null && selectedDevice == previewTextureDeviceIndex && Capturing.isCapturing(selectedDevice)) {
-            guiGraphics.blit(RenderType::guiTextured, PREVIEW_TEXTURE, menuX + menuWidth - PREVIEW_DIM - 4, menuY + 21, 0.0F, 0.0F, PREVIEW_DIM, PREVIEW_DIM, PREVIEW_DIM, PREVIEW_DIM);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, PREVIEW_TEXTURE, menuX + menuWidth - PREVIEW_DIM - 4, menuY + 21, 0.0F, 0.0F, PREVIEW_DIM, PREVIEW_DIM, PREVIEW_DIM, PREVIEW_DIM);
         }
     }
 

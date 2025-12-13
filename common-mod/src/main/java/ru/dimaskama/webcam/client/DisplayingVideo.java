@@ -53,7 +53,7 @@ public class DisplayingVideo {
                 if (texture != null) {
                     texture.close();
                 }
-                texture = new DynamicTexture(image);
+                texture = new DynamicTexture(textureId::getPath, image);
                 texture.setFilter(true, false);
                 Minecraft.getInstance().getTextureManager().register(textureId, texture);
             } else {

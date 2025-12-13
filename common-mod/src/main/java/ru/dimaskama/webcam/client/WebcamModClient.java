@@ -11,6 +11,7 @@ import ru.dimaskama.webcam.client.cap.Capturing;
 import ru.dimaskama.webcam.client.net.WebcamClient;
 import ru.dimaskama.webcam.client.screen.WebcamScreen;
 import ru.dimaskama.webcam.config.JsonConfig;
+import ru.dimaskama.webcam.client.compat.IrisCompat;
 import ru.dimaskama.webcam.client.config.BlockedSources;
 import ru.dimaskama.webcam.client.config.ClientConfig;
 import ru.dimaskama.webcam.client.render.WebcamRenderTypes;
@@ -34,11 +35,12 @@ public class WebcamModClient {
             BlockedSources.CODEC,
             BlockedSources::new
     );
+    public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(WebcamMod.id("webcam"));
     public static final KeyMapping OPEN_WEBCAM_MENU_KEY = new KeyMapping(
             "key.webcam.open_menu",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_C,
-            "key.categories.webcam"
+            KEY_CATEGORY
     );
     private static WebcamClientService service;
     private static boolean canUseAdvancedConfigScreen;
@@ -55,6 +57,7 @@ public class WebcamModClient {
         UpdateDevicesButton.updateDevices();
 
         WebcamRenderTypes.init();
+        IrisCompat.init();
     }
 
     public static WebcamClientService getService() {
