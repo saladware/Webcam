@@ -3,7 +3,7 @@ package ru.dimaskama.webcam.client.render;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.Webcam;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.WebcamModClient;
@@ -13,10 +13,10 @@ import ru.dimaskama.webcam.client.cap.Capturing;
 
 public class WebcamHud {
 
-    private static final ResourceLocation WEBCAM_SPRITE = WebcamMod.id("webcam");
-    private static final ResourceLocation WEBCAM_DISABLED_SPRITE = WebcamMod.id("webcam_disabled");
-    private static final ResourceLocation WEBCAM_NO_CONNECTION_SPRITE = WebcamMod.id("webcam_no_connection");
-    private static final ResourceLocation WEBCAM_CONNECTING_SPRITE = WebcamMod.id("webcam_connecting");
+    private static final Identifier WEBCAM_SPRITE = WebcamMod.id("webcam");
+    private static final Identifier WEBCAM_DISABLED_SPRITE = WebcamMod.id("webcam_disabled");
+    private static final Identifier WEBCAM_NO_CONNECTION_SPRITE = WebcamMod.id("webcam_no_connection");
+    private static final Identifier WEBCAM_CONNECTING_SPRITE = WebcamMod.id("webcam_connecting");
 
     public static void drawHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         ClientConfig config = WebcamModClient.CONFIG.getData();
@@ -28,7 +28,7 @@ public class WebcamHud {
             );
             guiGraphics.pose().scale(config.hud().iconScale());
             WebcamClient client = WebcamClient.getInstance();
-            ResourceLocation sprite;
+            Identifier sprite;
             if (client == null) {
                 sprite = WEBCAM_NO_CONNECTION_SPRITE;
             } else if (!client.isAuthenticated()) {

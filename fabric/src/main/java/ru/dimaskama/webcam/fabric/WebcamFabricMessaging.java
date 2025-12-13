@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import ru.dimaskama.webcam.message.Channel;
 import ru.dimaskama.webcam.message.Message;
@@ -22,7 +22,7 @@ public class WebcamFabricMessaging {
 
     @SuppressWarnings("unchecked")
     public static <T extends Message> void register(Channel<T> channel, @Nullable ServerMessaging.ServerHandler<T> handler) {
-        CustomPacketPayload.Type<MessagePayload> payloadType = new CustomPacketPayload.Type<>(ResourceLocation.parse(channel.getId()));
+        CustomPacketPayload.Type<MessagePayload> payloadType = new CustomPacketPayload.Type<>(Identifier.parse(channel.getId()));
         CHANNEL_TO_PAYLOAD.put(channel, payloadType);
         (handler != null ? PayloadTypeRegistry.playC2S() : PayloadTypeRegistry.playS2C()).register(
                 payloadType,

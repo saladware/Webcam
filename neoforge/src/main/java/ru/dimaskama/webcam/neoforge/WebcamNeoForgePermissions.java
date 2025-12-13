@@ -2,6 +2,7 @@ package ru.dimaskama.webcam.neoforge;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.server.permission.PermissionAPI;
@@ -29,7 +30,7 @@ public class WebcamNeoForgePermissions {
             Webcam.MOD_ID,
             "command.config",
             PermissionTypes.BOOLEAN,
-            (player, uuid, contexts) -> player != null && player.hasPermissions(2)
+            (player, uuid, contexts) -> player != null && player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)
     );
 
     @SubscribeEvent
@@ -47,7 +48,7 @@ public class WebcamNeoForgePermissions {
 
     public static boolean checkWebcamconfigCommand(CommandSourceStack commandSource) {
         ServerPlayer player = commandSource.getPlayer();
-        return player != null ? PermissionAPI.getPermission(player, WEBCAMCONFIG_COMMAND) : commandSource.hasPermission(2);
+        return player != null ? PermissionAPI.getPermission(player, WEBCAMCONFIG_COMMAND) : commandSource.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
     }
 
 }

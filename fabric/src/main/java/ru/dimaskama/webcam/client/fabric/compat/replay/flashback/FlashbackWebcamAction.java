@@ -6,17 +6,17 @@ import com.moulberry.flashback.playback.ReplayPlayer;
 import com.moulberry.flashback.playback.ReplayServer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.fabric.compat.replay.ReplayWebcamMessage;
 
 public class FlashbackWebcamAction implements Action {
 
     public static final FlashbackWebcamAction INSTANCE = new FlashbackWebcamAction();
-    private static final ResourceLocation NAME = WebcamMod.id("action/webcam_optional");
+    private static final Identifier NAME = WebcamMod.id("action/webcam_optional");
 
     @Override
-    public ResourceLocation name() {
+    public Identifier name() {
         return NAME;
     }
 

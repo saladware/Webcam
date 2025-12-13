@@ -4,9 +4,10 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.Util;
 import net.minecraft.client.renderer.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.WebcamModClient;
 
@@ -23,7 +24,7 @@ public class WebcamRenderTypes {
             .withSampler("Sampler0")
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS)
             .build();
-    private static final Function<ResourceLocation, RenderType> SQUARE = Util.memoize(textureId -> WebcamModClient.getService().createWebcamRenderType(
+    private static final Function<Identifier, RenderType> SQUARE = Util.memoize(textureId -> WebcamModClient.getService().createWebcamRenderType(
             "webcam_square",
             SQUARE_PIPELINE,
             textureId
@@ -37,7 +38,7 @@ public class WebcamRenderTypes {
             .withSampler("Sampler0")
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.TRIANGLE_FAN)
             .build();
-    private static final Function<ResourceLocation, RenderType> ROUND = Util.memoize(textureId -> WebcamModClient.getService().createWebcamRenderType(
+    private static final Function<Identifier, RenderType> ROUND = Util.memoize(textureId -> WebcamModClient.getService().createWebcamRenderType(
             "webcam_round",
             ROUND_PIPELINE,
             textureId
@@ -46,11 +47,11 @@ public class WebcamRenderTypes {
     public static void init() {
     }
 
-    public static RenderType square(ResourceLocation textureId) {
+    public static RenderType square(Identifier textureId) {
         return SQUARE.apply(textureId);
     }
 
-    public static RenderType round(ResourceLocation textureId) {
+    public static RenderType round(Identifier textureId) {
         return ROUND.apply(textureId);
     }
 

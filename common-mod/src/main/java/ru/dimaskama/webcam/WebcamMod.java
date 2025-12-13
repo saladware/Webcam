@@ -1,6 +1,6 @@
 package ru.dimaskama.webcam;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.nio.file.Path;
 
@@ -17,8 +17,8 @@ public class WebcamMod {
         return service;
     }
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(Webcam.MOD_ID, path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(Webcam.MOD_ID, path);
     }
 
     private static String splitModVersion(String modVersion) {

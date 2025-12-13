@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.util.UndashedUuid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.net.KnownSource;
 
@@ -19,7 +19,7 @@ public class KnownSourceClient {
     @Nullable
     private final NativeImage customIcon;
     @Nullable
-    private ResourceLocation customIconId;
+    private Identifier customIconId;
     private String nameForSearch;
 
     public KnownSourceClient(UUID uuid, String name) {
@@ -61,9 +61,9 @@ public class KnownSourceClient {
     }
 
     @Nullable
-    public ResourceLocation getCustomIcon() {
+    public Identifier getCustomIcon() {
         if (customIcon != null && customIconId == null) {
-            ResourceLocation id = WebcamMod.id("custom_icon_" + UndashedUuid.toString(uuid));
+            Identifier id = WebcamMod.id("custom_icon_" + UndashedUuid.toString(uuid));
             Minecraft.getInstance().getTextureManager().register(id, new DynamicTexture(id::getPath, customIcon));
             customIconId = id;
         }

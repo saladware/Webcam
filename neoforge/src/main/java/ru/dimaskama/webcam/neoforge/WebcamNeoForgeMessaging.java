@@ -3,7 +3,7 @@ package ru.dimaskama.webcam.neoforge;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -29,7 +29,7 @@ public class WebcamNeoForgeMessaging {
     private static final Map<Channel<?>, CustomPacketPayload.Type<MessagePayload>> CHANNEL_TO_PAYLOAD = new HashMap<>();
 
     public static <T extends Message> void register(Channel<T> channel, @Nullable ServerMessaging.ServerHandler<T> handler) {
-        CHANNEL_TO_PAYLOAD.put(channel, new CustomPacketPayload.Type<>(ResourceLocation.parse(channel.getId())));
+        CHANNEL_TO_PAYLOAD.put(channel, new CustomPacketPayload.Type<>(Identifier.parse(channel.getId())));
         channelsToRegister.add(new ChannelToRegister<>(channel, handler));
     }
 

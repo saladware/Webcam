@@ -1,12 +1,14 @@
 package ru.dimaskama.webcam.client.neoforge;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.FilterMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,14 +56,12 @@ public class WebcamNeoForgeClientEvents {
             }
 
             @Override
-            public RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, ResourceLocation textureId) {
+            public RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, Identifier textureId) {
                 return RenderType.create(
                         name,
-                        1536,
-                        renderPipeline,
-                        RenderType.CompositeState.builder()
-                                .setTextureState(new RenderStateShard.TextureStateShard(textureId, false))
-                                .createCompositeState(false)
+                        RenderSetup.builder(renderPipeline)
+                                .withTexture("Sampler0", textureId, () -> RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR))
+                                .createRenderSetup()
                 );
             }
 

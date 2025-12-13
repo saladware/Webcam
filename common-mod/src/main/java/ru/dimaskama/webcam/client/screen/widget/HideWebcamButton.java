@@ -1,7 +1,6 @@
 package ru.dimaskama.webcam.client.screen.widget;
 
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -9,13 +8,13 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.WebcamMod;
 
 public class HideWebcamButton extends AbstractButton {
 
-    private static final ResourceLocation BLOCKED_SPRITE = WebcamMod.id("webcam_disabled");
-    private static final ResourceLocation NOT_BLOCKED_SPRITE = WebcamMod.id("webcam");
+    private static final Identifier BLOCKED_SPRITE = WebcamMod.id("webcam_disabled");
+    private static final Identifier NOT_BLOCKED_SPRITE = WebcamMod.id("webcam");
     private final BooleanConsumer consumer;
     private boolean blocked;
 
@@ -27,15 +26,11 @@ public class HideWebcamButton extends AbstractButton {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        renderDefaultSprite(guiGraphics);
         int spriteX = getX() + ((getWidth() - 16) >> 1);
         int spriteY = getY() + ((getHeight() - 16) >> 1);
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, blocked ? BLOCKED_SPRITE : NOT_BLOCKED_SPRITE, spriteX, spriteY, 16, 16, 0xFFFFFFFF);
-    }
-
-    @Override
-    public void renderString(GuiGraphics guiGraphics, Font font, int i) {
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.dimaskama.webcam.client.screen.widget;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -33,6 +34,12 @@ public class ResolutionSelectButton extends AbstractButton {
         selected = available[index];
         setMessage(getText(selected));
         updateConsumer.accept(selected);
+    }
+
+    @Override
+    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        renderDefaultSprite(guiGraphics);
+        renderDefaultLabel(guiGraphics.textRendererForWidget(this, GuiGraphics.HoveredTextEffects.TOOLTIP_ONLY));
     }
 
     private static Component getText(Resolution selected) {

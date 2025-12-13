@@ -3,13 +3,13 @@ package ru.dimaskama.webcam.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import ru.dimaskama.webcam.config.VideoDisplayShape;
 
 public class WebcamRenderer {
 
-    public static void render(ResourceLocation textureId, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, float halfWidth, float halfHeight, VideoDisplayShape shape) {
+    public static void render(Identifier textureId, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, float halfWidth, float halfHeight, VideoDisplayShape shape) {
         switch (shape) {
             case SQUARE -> submitNodeCollector.submitCustomGeometry(
                     poseStack,

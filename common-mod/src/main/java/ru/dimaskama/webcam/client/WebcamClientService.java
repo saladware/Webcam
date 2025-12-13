@@ -3,8 +3,8 @@ package ru.dimaskama.webcam.client;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.message.Channel;
 import ru.dimaskama.webcam.message.Message;
 import ru.dimaskama.webcam.net.packet.Packet;
@@ -21,7 +21,7 @@ public interface WebcamClientService {
 
     Screen createAdvancedConfigScreen(@Nullable Screen parent);
 
-    RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, ResourceLocation textureId);
+    RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, Identifier textureId);
 
     void recordPacket(Packet packet);
 

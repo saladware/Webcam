@@ -1,6 +1,7 @@
 package ru.dimaskama.webcam.client.screen.widget;
 
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.InputWithModifiers;
@@ -31,6 +32,12 @@ public class DeviceSelectButton extends AbstractButton {
         }
         updateConsumer.accept(selected);
         setMessage(getText(selected));
+    }
+
+    @Override
+    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        renderDefaultSprite(guiGraphics);
+        renderDefaultLabel(guiGraphics.textRendererForWidget(this, GuiGraphics.HoveredTextEffects.TOOLTIP_ONLY));
     }
 
     private static Component getText(int selected) {

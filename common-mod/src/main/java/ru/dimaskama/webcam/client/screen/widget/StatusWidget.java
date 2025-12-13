@@ -7,14 +7,14 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.net.WebcamClient;
 
 public class StatusWidget extends AbstractWidget {
 
-    private static final ResourceLocation FINE_SPRITE = WebcamMod.id("fine");
-    private static final ResourceLocation NOT_FINE_SPRITE = WebcamMod.id("not_fine");
+    private static final Identifier FINE_SPRITE = WebcamMod.id("fine");
+    private static final Identifier NOT_FINE_SPRITE = WebcamMod.id("not_fine");
     private Status status;
 
     public StatusWidget(int x, int y, int width, int height) {
@@ -25,7 +25,7 @@ public class StatusWidget extends AbstractWidget {
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         update();
-        ResourceLocation sprite = status.fine ? FINE_SPRITE : NOT_FINE_SPRITE;
+        Identifier sprite = status.fine ? FINE_SPRITE : NOT_FINE_SPRITE;
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, getX(), getY(), getWidth(), getHeight());
     }
 

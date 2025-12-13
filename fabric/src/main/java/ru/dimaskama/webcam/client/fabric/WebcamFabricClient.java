@@ -1,6 +1,8 @@
 package ru.dimaskama.webcam.client.fabric;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.FilterMode;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -10,9 +12,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.client.WebcamClientService;
 import ru.dimaskama.webcam.client.WebcamModClient;
 import ru.dimaskama.webcam.client.fabric.compat.replay.ReplaysCompat;
@@ -53,14 +55,12 @@ public class WebcamFabricClient implements ClientModInitializer {
             }
 
             @Override
-            public RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, ResourceLocation textureId) {
+            public RenderType createWebcamRenderType(String name, RenderPipeline renderPipeline, Identifier textureId) {
                 return RenderType.create(
                         name,
-                        1536,
-                        renderPipeline,
-                        RenderType.CompositeState.builder()
-                                .setTextureState(new RenderStateShard.TextureStateShard(textureId, false))
-                                .createCompositeState(false)
+                        RenderSetup.builder(renderPipeline)
+                                .withTexture("Sampler0", textureId, () -> RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR))
+                                .createRenderSetup()
                 );
             }
 

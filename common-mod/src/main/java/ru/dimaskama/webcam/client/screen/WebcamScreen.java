@@ -9,7 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.Webcam;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.*;
@@ -28,8 +28,8 @@ import javax.annotation.Nullable;
 
 public class WebcamScreen extends Screen implements DeviceOutputListener {
 
-    public static final ResourceLocation BACKGROUND_SPRITE = WebcamMod.id("background");
-    private static final ResourceLocation PREVIEW_TEXTURE = WebcamMod.id("webcam_preview");
+    public static final Identifier BACKGROUND_SPRITE = WebcamMod.id("background");
+    private static final Identifier PREVIEW_TEXTURE = WebcamMod.id("webcam_preview");
     private static final int BUTTON_WIDTH = 152;
     private static final int MENU_HEIGHT = 167;
     private static final int PREVIEW_DIM = 142;
@@ -98,7 +98,6 @@ public class WebcamScreen extends Screen implements DeviceOutputListener {
                     NativeImage newImage = ImageUtil.createNativeImage(prevImage, width, height, rgba);
                     if (newImage != prevImage) {
                         previewTexture = new DynamicTexture(PREVIEW_TEXTURE::getPath, newImage);
-                        previewTexture.setFilter(true, false);
                         minecraft.getTextureManager().register(PREVIEW_TEXTURE, previewTexture);
                     } else {
                         previewTexture.upload();

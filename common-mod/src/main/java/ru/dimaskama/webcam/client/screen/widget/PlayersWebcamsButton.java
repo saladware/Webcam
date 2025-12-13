@@ -1,7 +1,6 @@
 package ru.dimaskama.webcam.client.screen.widget;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -10,13 +9,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.screen.PlayersWebcamsScreen;
 
 public class PlayersWebcamsButton extends AbstractButton {
 
-    private static final ResourceLocation SPRITE = WebcamMod.id("button/manage_players_webcams");
+    private static final Identifier SPRITE = WebcamMod.id("button/manage_players_webcams");
 
     public PlayersWebcamsButton(int x, int y, int width, int height) {
         super(x, y, width, height, Component.translatable("webcam.screen.webcam.manage_players_webcams"));
@@ -24,15 +23,11 @@ public class PlayersWebcamsButton extends AbstractButton {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        renderDefaultSprite(guiGraphics);
         int spriteX = getX() + ((getWidth() - 12) >> 1);
         int spriteY = getY() + ((getHeight() - 12) >> 1);
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, spriteX, spriteY, 12, 12, 0xFFFFFFFF);
-    }
-
-    @Override
-    public void renderString(GuiGraphics guiGraphics, Font font, int i) {
     }
 
     @Override

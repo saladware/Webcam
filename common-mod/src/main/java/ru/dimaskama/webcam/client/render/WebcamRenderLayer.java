@@ -53,8 +53,8 @@ public class WebcamRenderLayer<M extends HumanoidModel<AvatarRenderState>> exten
                             poseStack.translate(0.0F, -aboveHead.getOffsetY(), 0.0F);
                             Vector2fc rot = aboveHead.getCustomRotation();
                             poseStack.mulPose(new Quaternionf().rotationYXZ(
-                                    ((rot != null ? rot.y() : 180.0F + entityRenderDispatcher.camera.getYRot()) - renderState.bodyRot) * Mth.DEG_TO_RAD,
-                                    (rot != null ? rot.x() : -entityRenderDispatcher.camera.getXRot()) * Mth.DEG_TO_RAD,
+                                    ((rot != null ? rot.y() : 180.0F + entityRenderDispatcher.camera.yRot()) - renderState.bodyRot) * Mth.DEG_TO_RAD,
+                                    (rot != null ? rot.x() : -entityRenderDispatcher.camera.xRot()) * Mth.DEG_TO_RAD,
                                     0.0F
                             ));
                             float halfSize = 0.5F * aboveHead.getSize();

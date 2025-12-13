@@ -10,7 +10,7 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.PlayerSkin;
 import ru.dimaskama.webcam.WebcamMod;
 import ru.dimaskama.webcam.client.DisplayingVideoManager;
@@ -78,7 +78,7 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
 
     public class Entry extends ContainerObjectSelectionList.Entry<Entry> {
 
-        private static final ResourceLocation UNKNOWN_SPRITE = WebcamMod.id("unknown");
+        private static final Identifier UNKNOWN_SPRITE = WebcamMod.id("unknown");
         private final KnownSourceClient source;
         private final List<AbstractWidget> children = new ArrayList<>();
         private final HideWebcamButton hideButton;
@@ -116,7 +116,7 @@ public class PlayersWebcamsList extends ContainerObjectSelectionList<PlayersWebc
 
             guiGraphics.fill(x, y, x + entryWidth - 4, y + entryHeight, 0x33000000);
 
-            ResourceLocation customIcon = source.getCustomIcon();
+            Identifier customIcon = source.getCustomIcon();
             if (customIcon != null) {
                 guiGraphics.blit(RenderPipelines.GUI_TEXTURED, customIcon, x, y, 0.0F, 0.0F, 32, 32, 32, 32);
             } else {
