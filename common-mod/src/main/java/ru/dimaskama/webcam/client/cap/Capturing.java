@@ -19,7 +19,20 @@ public class Capturing {
 
     public static void init() {
         Webcam.getLogger().info("Loading OpenCV...");
-        OpenCV.loadLocally();
+        try {
+            OpenCV.loadShared();
+            Webcam.getLogger().info("Loaded system OpenCV");
+        } catch (Throwable systemError) {
+            Webcam.getLogger().warn("Failed to load system OpenCV, falling back to bundled binaries", systemError);
+            try {
+                OpenCV.loadLocally();
+                Webcam.getLogger().info("Loaded bundled OpenCV");
+            } catch (Throwable bundledError) {
+                bundledError.addSuppressed(systemError);
+                Webcam.getLogger().error("Failed to load OpenCV from system or bundled binaries", bundledError);
+                throw bundledError;
+            }
+        }
         if (Webcam.isDebugMode()) {
             Webcam.getLogger().info("OpenCV build information: " + Core.getBuildInformation());
         }
